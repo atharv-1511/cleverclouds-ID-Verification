@@ -12,13 +12,24 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  // Use env var or default account key
-  const DIDIT_API_KEY = process.env.DIDIT_API_KEY || "SQY1vXYqmLxBdpXhi3g2lpxlDYjBxX560FkSh4CVf9g";
+  // Sanitize and trim API key (remove accidental spaces or newlines)
+  const rawKey = process.env.DIDIT_API_KEY || "SQY1vXYqmLxBdpXhi3g2lpxlDYjBxX560FkSh4CVf9g";
+  const DIDIT_API_KEY = (rawKey || "").trim();
+
   // Fast ID check workflow id
   const WORKFLOW_ID = "83d9edbe-d839-4bca-8e22-e9e02d89f537";
 
   try {
-    const { vendorData, email, name } = req.body || {};
+    let body = req.body;
+    if (typeof body === "string") {
+      try {
+        body = JSON.parse(body);
+      } catch (_) {
+        body = {};
+      }
+    }
+
+    const { vendorData, email, name } = body || {};
     const internalUserId = vendorData || `cli_${Date.now()}`;
     const host = req.headers["x-forwarded-host"] || req.headers.host || "cleverclouds.in";
     const protocol = req.headers["x-forwarded-proto"] || "https";
@@ -35,7 +46,7 @@ export default async function handler(req, res) {
       }
     };
 
-    console.log(`[Didit API] Creating KYC session for ${internalUserId}...`);
+    console.log(`[Didit API] Creating session for ${internalUserId}...`);
 
     const diditRes = await fetch("https://verification.didit.me/v3/session/", {
       method: "POST",
@@ -48,18 +59,17 @@ export default async function handler(req, res) {
 
     if (!diditRes.ok) {
       const detail = await diditRes.text();
-      console.error(`[Didit API Error] ${diditRes.status}:`, detail);
+      console.error(`[Didit API Error] HTTP ${diditRes.status}:`, detail);
       return res.status(diditRes.status).json({
         error: "session_create_failed",
         status: diditRes.status,
-        detail
+        detail: detail || "Didit API returned an error"
       });
     }
 
     const session = await diditRes.json();
-    console.log(`[Didit API Success] Session Created: ${session.session_id}, URL: ${session.url}`);
+    console.log(`[Didit API Success] Session ID: ${session.session_id}`);
 
-    // Return url and session_id
     return res.status(200).json({
       url: session.url,
       session_id: session.session_id,
@@ -68,6 +78,9 @@ export default async function handler(req, res) {
     });
   } catch (err) {
     console.error("[Verify Route Exception]", err);
-    return res.status(500).json({ error: "internal_server_error", message: err.message });
+    return res.status(500).json({
+      error: "internal_server_error",
+      message: err.message
+    });
   }
 }

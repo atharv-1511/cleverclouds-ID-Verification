@@ -1,6 +1,7 @@
 {
   "name": "clever-clouds-verification",
   "version": "1.0.0",
+  "type": "module",
   "description": "Clever Clouds Identity Verification Landing Page & Didit KYC Integration",
   "main": "server.js",
   "scripts": {
@@ -8,9 +9,6 @@
     "dev": "node --watch server.js"
   },
   "dependencies": {
-    "@didit-protocol/sdk-web": "^0.2.1",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2"
+    "@didit-protocol/sdk-web": "^0.2.1"
   }
 }
