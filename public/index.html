@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Identity Verification • Clever Clouds</title>
-  <meta name="description" content="Clever Clouds Client Identity Verification Portal powered by Didit KYC Protocol. Fast, secure, and globally compliant.">
+  <title>Identity & Background Verification • Clever Clouds</title>
+  <meta name="description" content="Clever Clouds Enterprise Candidate Verification Portal powered by Didit KYC Protocol. Fast, secure, and compliant.">
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,288 +12,326 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="styles.css">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%236366f1'%3E%3Cpath d='M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231e3a8a'%3E%3Cpath d='M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z'/%3E%3C/svg%3E">
 </head>
 <body>
 
-  <!-- Ambient Light Accents -->
-  <div class="ambient-glow">
-    <div class="glow-orb orb-primary"></div>
-    <div class="glow-orb orb-cyan"></div>
-    <div class="subtle-grid"></div>
-  </div>
-
-  <div class="app-layout">
-    <!-- Header -->
-    <header class="app-header">
-      <div class="header-left">
-        <a href="https://www.cleverclouds.in" target="_blank" rel="noopener noreferrer" class="brand-link" title="Clever Clouds Home">
+  <!-- peopleHum Style Corporate Topbar -->
+  <header class="ph-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <a href="https://www.cleverclouds.in" target="_blank" rel="noopener noreferrer" class="brand-logo-container" title="Clever Clouds Official">
           <img 
             src="https://www.cleverclouds.in/logo-white.svg" 
             alt="Clever Clouds" 
-            class="brand-logo"
+            class="brand-logo-img"
             onerror="this.onerror=null; this.src='https://www.cleverclouds.in/cc-blue.webp';"
           />
         </a>
-        <div class="header-separator"></div>
-        <span class="portal-tag">Identity Portal</span>
+        <div class="brand-divider"></div>
+        <div class="header-portal-title">
+          <span class="portal-title-text">Candidate Verification Portal</span>
+          <span class="portal-subtitle-text">Clever Clouds Screening</span>
+        </div>
       </div>
 
-      <div class="header-right">
-        <div class="security-chip">
-          <span class="lock-icon">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+      <div class="header-security-badges">
+        <div class="compliance-badge">
+          <span class="badge-dot"></span>
+          <span>ISO 27001 & SOC 2 Ready</span>
+        </div>
+        <div class="compliance-badge">
+          <span class="badge-dot"></span>
+          <span>Didit KYC Protocol</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Canvas: peopleHum Split Layout -->
+  <main class="page-canvas">
+    <div class="split-layout">
+
+      <!-- LEFT SIDE: Context, Instructions & Checkpoint Steps -->
+      <aside class="context-panel">
+        <div class="context-hero-badge">
+          <span>Identity & Background Check</span>
+        </div>
+
+        <h1 class="context-heading">
+          Fast, Automated Candidate <span>Identity Screening</span>.
+        </h1>
+
+        <p class="context-description">
+          Welcome to the Clever Clouds onboarding and identity verification portal. This automated check verifies your legal identity documents and 3D facial biometrics in real-time.
+        </p>
+
+        <!-- peopleHum Step Checkpoints Card -->
+        <div class="screening-steps-card">
+          <div class="steps-card-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M9 11l3 3L22 4"/>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+            </svg>
+            <span>Verification Checkpoints</span>
+          </div>
+
+          <div class="steps-list">
+            <div class="step-row">
+              <div class="step-icon-circle">1</div>
+              <div class="step-content-col">
+                <span class="step-title-bold">Government Document OCR</span>
+                <span class="step-sub-text">Automated tamper detection & MRZ validation (Passport, ID, License)</span>
+              </div>
+            </div>
+
+            <div class="step-row">
+              <div class="step-icon-circle">2</div>
+              <div class="step-content-col">
+                <span class="step-title-bold">3D Biometric Liveness Scan</span>
+                <span class="step-sub-text">Anti-spoofing facial recognition with sub-millimeter precision</span>
+              </div>
+            </div>
+
+            <div class="step-row">
+              <div class="step-icon-circle">3</div>
+              <div class="step-content-col">
+                <span class="step-title-bold">Sanctions & AML Screening</span>
+                <span class="step-sub-text">Instant real-time check against global compliance databases</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Privacy Assurance -->
+        <div class="security-callout">
+          <div class="callout-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
               <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
             </svg>
-          </span>
-          <span class="chip-text">Bank-Grade 256-Bit TLS</span>
+          </div>
+          <div class="callout-text">
+            <strong>Privacy Protected:</strong> Your documents and biometric scans are encrypted with bank-grade 256-bit TLS encryption in strict accordance with GDPR and international privacy regulations.
+          </div>
         </div>
-      </div>
-    </header>
 
-    <!-- Main Verification Card -->
-    <main class="main-content">
-      <div class="portal-card">
+        <!-- Support -->
+        <div class="support-contact-box">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+          <span>Having trouble with your camera? Email <a href="mailto:reach-us@cleverclouds.in">reach-us@cleverclouds.in</a> or call <strong>+91 22 6971 1079</strong></span>
+        </div>
+      </aside>
 
-        <!-- Stepper -->
-        <nav class="flow-stepper" aria-label="Verification Progress">
-          <div class="step-item active" id="step1">
-            <div class="step-badge">1</div>
-            <span class="step-text">Client Details</span>
+      <!-- RIGHT SIDE: peopleHum Verification Card -->
+      <section class="verification-canvas-card">
+        
+        <!-- Progress Stepper -->
+        <div class="ph-stepper">
+          <div class="ph-step active" id="phStep1">
+            <div class="step-idx">1</div>
+            <span class="step-name">Candidate Info</span>
           </div>
-          <div class="step-connector" id="conn1"></div>
-          <div class="step-item" id="step2">
-            <div class="step-badge">2</div>
-            <span class="step-text">ID & Biometrics</span>
+          <div class="ph-step" id="phStep2">
+            <div class="step-idx">2</div>
+            <span class="step-name">ID & Liveness</span>
           </div>
-          <div class="step-connector" id="conn2"></div>
-          <div class="step-item" id="step3">
-            <div class="step-badge">3</div>
-            <span class="step-text">Verified</span>
+          <div class="ph-step" id="phStep3">
+            <div class="step-idx">3</div>
+            <span class="step-name">Status Complete</span>
           </div>
-        </nav>
+        </div>
 
-        <!-- VIEW 1: Client Input Form -->
-        <section class="flow-view active-view" id="viewForm">
-          <div class="view-header">
-            <div class="badge-row">
-              <span class="badge-soft">FAST ID CHECK</span>
-              <span class="badge-time">~2 MINS</span>
-            </div>
-            <h1 class="view-title">Verify Your Identity</h1>
-            <p class="view-desc">
-              Please enter your full legal name and email address as they appear on your official government documents to initiate the biometric verification session.
-            </p>
+        <!-- VIEW 1: Candidate Intake Form -->
+        <div class="form-view-body" id="phFormView">
+          <div class="form-intro-header">
+            <h2 class="form-main-heading">Candidate Information</h2>
+            <p class="form-sub-heading">Please confirm your details to begin the automated screening session.</p>
           </div>
 
-          <!-- Alert for client messages -->
-          <div id="errorAlert" class="ui-alert ui-alert-error" style="display: none;"></div>
+          <div id="phAlert" class="ph-alert-box" style="display: none;"></div>
 
-          <form id="verificationForm" onsubmit="handleStartVerification(event)">
-            <div class="fields-grid">
-              <div class="input-block">
-                <label for="clientName" class="input-label">Full Legal Name <span class="required-star">*</span></label>
-                <div class="input-wrapper">
-                  <svg class="input-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <form id="candidateForm" onsubmit="handleCandidateSubmit(event)">
+            <div class="form-grid-2">
+              <div class="form-group-item">
+                <label for="cName" class="ph-input-label">Full Legal Name <span class="req-asterisk">*</span></label>
+                <div class="input-with-icon">
+                  <svg class="input-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
                     <circle cx="12" cy="7" r="4"/>
                   </svg>
-                  <input type="text" id="clientName" class="text-input" placeholder="e.g. Atharv Raskar" required autofocus>
+                  <input type="text" id="cName" class="ph-text-input" placeholder="e.g. Atharv Raskar" required autofocus value="Atharv Raskar">
                 </div>
               </div>
 
-              <div class="input-block">
-                <label for="clientEmail" class="input-label">Work / Personal Email <span class="required-star">*</span></label>
-                <div class="input-wrapper">
-                  <svg class="input-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <div class="form-group-item">
+                <label for="cEmail" class="ph-input-label">Corporate / Personal Email <span class="req-asterisk">*</span></label>
+                <div class="input-with-icon">
+                  <svg class="input-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <rect width="20" height="16" x="2" y="4" rx="2"/>
                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
                   </svg>
-                  <input type="email" id="clientEmail" class="text-input" placeholder="name@domain.com" required>
+                  <input type="email" id="cEmail" class="ph-text-input" placeholder="you@company.com" required value="reach-us@cleverclouds.in">
                 </div>
               </div>
             </div>
 
-            <div class="input-block">
-              <label for="clientRef" class="input-label">Client Reference / ID Number <span class="label-hint">(Optional)</span></label>
-              <div class="input-wrapper">
-                <svg class="input-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <div class="form-group-item">
+              <label for="cRef" class="ph-input-label">Reference ID / Candidate ID</label>
+              <div class="input-with-icon">
+                <svg class="input-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect width="20" height="14" x="2" y="5" rx="2"/>
                   <line x1="2" x2="22" y1="10" y2="10"/>
                 </svg>
-                <input type="text" id="clientRef" class="text-input" placeholder="e.g. CLV-9821 or Mobile Number">
+                <input type="text" id="cRef" class="ph-text-input" placeholder="e.g. CLV-REF-8921 or Mobile Number">
               </div>
             </div>
 
-            <!-- Prerequisites Card -->
-            <div class="prereq-box">
-              <div class="prereq-header">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <!-- Equipment Check Reminder -->
+            <div class="ph-prereq-banner">
+              <div class="banner-icon">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <circle cx="12" cy="12" r="10"/>
-                  <line x1="12" x2="12" y1="8" y2="12"/>
-                  <line x1="12" x2="12.01" y1="16" y2="16"/>
+                  <line x1="12" y1="16" x2="12" y2="12"/>
+                  <line x1="12" y1="8" x2="12.01" y2="8"/>
                 </svg>
-                <span>Before you begin:</span>
               </div>
-              <div class="prereq-list">
-                <div class="prereq-item">
-                  <span class="prereq-bullet"></span>
-                  <span><strong>Valid Government ID:</strong> Passport, Driver's License, or National ID Card</span>
-                </div>
-                <div class="prereq-item">
-                  <span class="prereq-bullet"></span>
-                  <span><strong>Camera Enabled:</strong> Allow camera access when prompted for the quick 3D liveness scan</span>
-                </div>
+              <div class="banner-content">
+                <strong>Prerequisites:</strong> Have your original government ID ready and grant camera permissions when requested on the next screen.
               </div>
             </div>
 
-            <!-- Mandatory Legal Disclosure -->
-            <div class="consent-block">
-              <label class="checkbox-container">
-                <input type="checkbox" id="consentCheck" required checked>
-                <span class="checkbox-custom"></span>
-                <span class="consent-text">
-                  I consent to the collection and verification of my government-issued ID and automated 3D facial liveness biometrics by <strong>Clever Clouds</strong> via <strong>Didit KYC Protocol</strong> in compliance with international data privacy and AML standards.
+            <!-- Consent -->
+            <div class="ph-consent-wrapper">
+              <label class="consent-checkbox-row">
+                <input type="checkbox" id="cConsent" required checked>
+                <span class="consent-label-text">
+                  I consent to the collection and verification of my government-issued ID and 3D biometric facial scans by <strong>Clever Clouds</strong> and <strong>Didit KYC Protocol</strong> strictly for background verification and regulatory compliance purposes.
                 </span>
               </label>
             </div>
 
-            <button type="submit" id="startBtn" class="cta-button">
+            <button type="submit" id="phStartBtn" class="ph-btn-primary">
               <span>Start Identity Verification</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="9 18 15 12 9 6"/>
               </svg>
             </button>
           </form>
-        </section>
+        </div>
 
-        <!-- VIEW 2: Professional Embedded Didit Session Window -->
-        <section class="flow-view" id="viewVerification" style="display: none;">
-          <div class="terminal-window">
-            <!-- Window Title Bar -->
-            <div class="terminal-bar">
-              <div class="bar-left">
-                <span class="mac-dot dot-red"></span>
-                <span class="mac-dot dot-yellow"></span>
-                <span class="mac-dot dot-green"></span>
-                <span class="session-label">Didit Secure Sandbox</span>
+        <!-- VIEW 2: Professional Didit Verification Window -->
+        <div class="ph-window-frame" id="phVerifyView" style="display: none;">
+          <div class="ph-window-topbar">
+            <div class="topbar-left">
+              <div class="window-indicator-dots">
+                <span class="win-dot win-dot-red"></span>
+                <span class="win-dot win-dot-yellow"></span>
+                <span class="win-dot win-dot-green"></span>
               </div>
+              <span class="window-title">Didit Biometric Verification Session</span>
+            </div>
 
-              <div class="bar-center">
-                <div class="live-status-pill">
-                  <span class="pulse-emerald"></span>
-                  <span id="sessionStatusBadge">Fast ID Check Active</span>
-                </div>
-              </div>
-
-              <div class="bar-right">
-                <a id="externalLink" href="#" target="_blank" rel="noopener noreferrer" class="action-link" title="Open verification in a new browser tab">
-                  <span>Pop out</span>
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
-                    <polyline points="15 3 21 3 21 9"/>
-                    <line x1="10" x2="21" y1="14" y2="3"/>
-                  </svg>
-                </a>
+            <div class="topbar-center">
+              <div class="session-live-chip">
+                <span class="live-beacon"></span>
+                <span id="phSessionStatus">Session Active</span>
               </div>
             </div>
 
-            <!-- Iframe Content Surface -->
-            <div class="terminal-content">
-              <!-- Loading Skeleton -->
-              <div id="iframeLoader" class="terminal-loader">
-                <div class="loader-circle"></div>
-                <div class="loader-copy">
-                  <h4>Initializing Secure Session...</h4>
-                  <p>Connecting camera & anti-spoofing engine</p>
-                </div>
-              </div>
-
-              <iframe 
-                id="diditIframe" 
-                src="about:blank" 
-                allow="camera; microphone; fullscreen; autoplay; encrypted-media" 
-                title="Didit Verification Session"
-                onload="document.getElementById('iframeLoader').style.display='none';">
-              </iframe>
-            </div>
-
-            <!-- Window Guidance Footer -->
-            <div class="terminal-footer">
-              <div class="hint-info">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            <div class="topbar-right">
+              <a id="phExtLink" href="#" target="_blank" rel="noopener noreferrer">
+                <span>Open in new window</span>
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" x2="21" y1="14" y2="3"/>
                 </svg>
-                <span>Follow the on-screen prompts to scan your ID and complete the 3D selfie.</span>
-              </div>
-              <button class="status-btn" onclick="checkStatusManually()">Refresh</button>
-            </div>
-          </div>
-        </section>
-
-        <!-- VIEW 3: Confirmation / Success Screen -->
-        <section class="flow-view" id="viewCompletion" style="display: none;">
-          <div class="completion-card">
-            <div class="check-emblem" id="resultIcon">
-              <svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2.5">
-                <polyline points="20 6 9 17 4 12"/>
-              </svg>
-            </div>
-
-            <h2 class="completion-title" id="resultHeading">Verification Complete</h2>
-            <p class="completion-subtitle" id="resultMessage">
-              Your identity documents and 3D facial liveness have been verified successfully.
-            </p>
-
-            <div class="receipt-box">
-              <div class="receipt-row">
-                <span class="receipt-label">Candidate</span>
-                <span class="receipt-value" id="resClientName">-</span>
-              </div>
-              <div class="receipt-row">
-                <span class="receipt-label">Session ID</span>
-                <span class="receipt-value font-mono" id="resSessionId">-</span>
-              </div>
-              <div class="receipt-row">
-                <span class="receipt-label">Status</span>
-                <span class="receipt-pill approved" id="resStatus">Approved</span>
-              </div>
-            </div>
-
-            <div class="completion-actions">
-              <a href="https://www.cleverclouds.in" class="cta-button" style="text-decoration: none; width: auto; padding: 12px 28px;">
-                Return to Clever Clouds
               </a>
             </div>
           </div>
-        </section>
 
-      </div>
+          <!-- Viewport with Iframe -->
+          <div class="ph-window-viewport">
+            <div id="phLoader" class="viewport-loader">
+              <div class="ph-spinner"></div>
+              <h4>Initializing Secure Session...</h4>
+              <p>Connecting camera and anti-spoofing engine</p>
+            </div>
+            <iframe 
+              id="phDiditIframe" 
+              src="about:blank" 
+              allow="camera; microphone; fullscreen; autoplay; encrypted-media" 
+              title="Didit Verification Flow"
+              onload="document.getElementById('phLoader').style.display='none';">
+            </iframe>
+          </div>
 
-      <!-- Support Footer Pill -->
-      <div class="support-bar">
-        <span>Need assistance with camera access or documents?</span>
-        <a href="mailto:reach-us@cleverclouds.in">reach-us@cleverclouds.in</a>
-        <span class="support-divider">•</span>
-        <span>WhatsApp: <strong>+91 22 6971 1079</strong></span>
-      </div>
-    </main>
+          <div class="ph-window-bottombar">
+            <span>Hold your document clearly inside the frame and complete the 3D selfie prompt.</span>
+            <button class="ph-btn-subtle" onclick="checkStatusManually()">Refresh Status</button>
+          </div>
+        </div>
 
-    <!-- Global App Footer -->
-    <footer class="app-footer">
-      <div class="footer-copy">
+        <!-- VIEW 3: Completion & Success View -->
+        <div class="completion-view-body" id="phCompletionView" style="display: none;">
+          <div class="completion-emblem-wrap">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="20 6 9 17 4 12"/>
+            </svg>
+          </div>
+
+          <h2 class="completion-heading" id="phHeading">Screening Completed</h2>
+          <p class="completion-desc" id="phDesc">
+            Your identity documents and 3D biometric verification have been processed successfully.
+          </p>
+
+          <div class="receipt-summary-table">
+            <div class="receipt-item-row">
+              <span class="receipt-item-label">Candidate Name</span>
+              <span class="receipt-item-val" id="phCandidateName">-</span>
+            </div>
+            <div class="receipt-item-row">
+              <span class="receipt-item-label">Verification ID</span>
+              <span class="receipt-item-val font-mono" id="phSessionId">-</span>
+            </div>
+            <div class="receipt-item-row">
+              <span class="receipt-item-label">Result Status</span>
+              <span class="ph-status-pill" id="phFinalStatus">Verified / Approved</span>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: center; gap: 12px;">
+            <a href="https://www.cleverclouds.in" class="ph-btn-primary" style="text-decoration: none; width: auto; padding: 12px 28px;">
+              Return to Clever Clouds
+            </a>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main>
+
+  <!-- peopleHum Style Footer with 2024 Copyright -->
+  <footer class="ph-footer">
+    <div class="footer-inner">
+      <div>
         &copy; 2024 Clever Clouds. All rights reserved.
       </div>
-      <div class="footer-links">
+      <div class="footer-nav">
         <a href="https://www.cleverclouds.in" target="_blank">Clever Clouds</a>
         <span>•</span>
         <span>Identity Protocol Powered by Didit</span>
       </div>
-    </footer>
-  </div>
+    </div>
+  </footer>
 
-  <div id="toastContainer" class="toast-stack"></div>
+  <div id="phToastContainer" class="ph-toast-stack"></div>
 
   <script src="app.js"></script>
 </body>

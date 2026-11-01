@@ -1,99 +1,98 @@
 /**
- * Clever Clouds Enterprise Verification Controller
- * Didit KYC Protocol Integration
+ * Clever Clouds Enterprise Identity Screening Controller
+ * peopleHum Design Integration • Powered by Didit KYC
  */
 
-let activeSessionId = null;
-let activeCandidate = null;
-let pollTimer = null;
+let currentSessionId = null;
+let currentCandidate = null;
+let statusPoller = null;
 
-// Toast Notification
-function notify(text, isError = false) {
-  const stack = document.getElementById('toastContainer');
-  if (!stack) return;
+// Toast Notifications
+function showNotification(message, isError = false) {
+  const container = document.getElementById('phToastContainer');
+  if (!container) return;
 
-  const item = document.createElement('div');
-  item.className = 'app-toast';
-  item.style.borderColor = isError ? 'rgba(239, 68, 68, 0.5)' : 'rgba(99, 102, 241, 0.4)';
-  item.innerHTML = `<span>${isError ? '⚠️' : '🛡️'}</span> <span>${text}</span>`;
-  stack.appendChild(item);
+  const toast = document.createElement('div');
+  toast.className = 'ph-toast';
+  toast.style.borderColor = isError ? '#ef4444' : '#3b82f6';
+  toast.innerHTML = `<span>${isError ? '⚠️' : '🛡️'}</span> <span>${message}</span>`;
+  container.appendChild(toast);
 
   setTimeout(() => {
-    item.style.opacity = '0';
-    item.style.transform = 'translateX(100%)';
-    item.style.transition = 'all 0.3s ease';
-    setTimeout(() => item.remove(), 300);
+    toast.style.opacity = '0';
+    toast.style.transform = 'translateY(10px)';
+    toast.style.transition = 'all 0.3s ease';
+    setTimeout(() => toast.remove(), 300);
   }, 4000);
 }
 
-function showError(msg) {
-  const alertBox = document.getElementById('errorAlert');
-  if (alertBox) {
-    alertBox.textContent = msg;
-    alertBox.style.display = 'block';
+function displayError(text) {
+  const alert = document.getElementById('phAlert');
+  if (alert) {
+    alert.textContent = text;
+    alert.style.display = 'block';
   }
 }
 
 function clearError() {
-  const alertBox = document.getElementById('errorAlert');
-  if (alertBox) {
-    alertBox.textContent = '';
-    alertBox.style.display = 'none';
+  const alert = document.getElementById('phAlert');
+  if (alert) {
+    alert.textContent = '';
+    alert.style.display = 'none';
   }
 }
 
 // Stepper updater
-function setStep(stepNum) {
-  const s1 = document.getElementById('step1');
-  const s2 = document.getElementById('step2');
-  const s3 = document.getElementById('step3');
-  const c1 = document.getElementById('conn1');
-  const c2 = document.getElementById('conn2');
+function updateStepper(step) {
+  const s1 = document.getElementById('phStep1');
+  const s2 = document.getElementById('phStep2');
+  const s3 = document.getElementById('phStep3');
 
-  s1.className = 'step-item';
-  s2.className = 'step-item';
-  s3.className = 'step-item';
+  s1.className = 'ph-step';
+  s2.className = 'ph-step';
+  s3.className = 'ph-step';
 
-  if (stepNum === 1) {
+  if (step === 1) {
     s1.classList.add('active');
-  } else if (stepNum === 2) {
+  } else if (step === 2) {
     s1.classList.add('completed');
     s2.classList.add('active');
-    c1.style.background = 'var(--accent-emerald)';
-  } else if (stepNum === 3) {
+  } else if (step === 3) {
     s1.classList.add('completed');
     s2.classList.add('completed');
     s3.classList.add('active', 'completed');
-    c1.style.background = 'var(--accent-emerald)';
-    c2.style.background = 'var(--accent-emerald)';
   }
 }
 
-// Start Verification Handler
-async function handleStartVerification(event) {
+// Form Submission & Session Creation
+async function handleCandidateSubmit(event) {
   event.preventDefault();
   clearError();
 
-  const nameInput = document.getElementById('clientName');
-  const emailInput = document.getElementById('clientEmail');
-  const refInput = document.getElementById('clientRef');
-  const consentCheck = document.getElementById('consentCheck');
-  const startBtn = document.getElementById('startBtn');
+  const nameInput = document.getElementById('cName');
+  const emailInput = document.getElementById('cEmail');
+  const refInput = document.getElementById('cRef');
+  const consentBox = document.getElementById('cConsent');
+  const submitBtn = document.getElementById('phStartBtn');
 
-  if (!consentCheck.checked) {
-    showError('Please check the consent box to proceed with the identity verification.');
-    notify('Consent required.', true);
+  if (!consentBox.checked) {
+    displayError('Please check the authorization box to consent to document and biometric verification.');
+    showNotification('Consent authorization required.', true);
     return;
   }
 
-  const fullName = nameInput.value.trim();
-  const email = emailInput.value.trim();
-  const clientRef = refInput.value.trim() || `cli_${Date.now()}`;
+  const candidateName = nameInput.value.trim();
+  const candidateEmail = emailInput.value.trim();
+  const candidateRef = refInput.value.trim() || `cand_${Date.now()}`;
 
-  activeCandidate = { name: fullName, email: email, ref: clientRef };
+  currentCandidate = {
+    name: candidateName,
+    email: candidateEmail,
+    ref: candidateRef
+  };
 
-  startBtn.disabled = true;
-  startBtn.innerHTML = `
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = `
     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 0.8s linear infinite;">
       <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
     </svg>
@@ -101,120 +100,120 @@ async function handleStartVerification(event) {
   `;
 
   try {
-    const response = await fetch('/api/verify', {
+    const res = await fetch('/api/verify', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        vendorData: clientRef,
-        email: email,
-        name: fullName
+        vendorData: candidateRef,
+        email: candidateEmail,
+        name: candidateName
       })
     });
 
-    if (!response.ok) {
-      const err = await response.json().catch(() => ({}));
-      const msg = err.detail || err.error || `Server responded with HTTP ${response.status}.`;
-      showError(`Unable to start verification: ${msg}`);
-      notify('Session creation failed.', true);
-      startBtn.disabled = false;
-      startBtn.innerHTML = `<span>Start Identity Verification</span> &rarr;`;
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      const msg = err.detail || err.error || `Server returned HTTP ${res.status}.`;
+      displayError(`Verification session could not be established: ${msg}`);
+      showNotification('Session setup failed.', true);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<span>Start Identity Verification</span> &rarr;`;
       return;
     }
 
-    const data = await response.json();
+    const data = await res.json();
     if (!data.url) {
-      showError('Didit verification service did not return an active session URL.');
-      notify('Invalid session response.', true);
-      startBtn.disabled = false;
-      startBtn.innerHTML = `<span>Start Identity Verification</span> &rarr;`;
+      displayError('Didit verification service did not return an active session URL.');
+      showNotification('Missing session URL.', true);
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `<span>Start Identity Verification</span> &rarr;`;
       return;
     }
 
-    activeSessionId = data.session_id;
+    currentSessionId = data.session_id;
 
-    // Transition view
-    document.getElementById('viewForm').style.display = 'none';
-    document.getElementById('viewVerification').style.display = 'block';
-    setStep(2);
+    // Transition view to Didit window
+    document.getElementById('phFormView').style.display = 'none';
+    document.getElementById('phVerifyView').style.display = 'flex';
+    updateStepper(2);
 
-    // Show iframe loading spinner
-    const loader = document.getElementById('iframeLoader');
+    // Show loader
+    const loader = document.getElementById('phLoader');
     if (loader) loader.style.display = 'flex';
 
-    // Inject verified Didit session URL
-    const iframe = document.getElementById('diditIframe');
+    // Inject iframe
+    const iframe = document.getElementById('phDiditIframe');
     iframe.src = data.url;
 
     // External link
-    const ext = document.getElementById('externalLink');
+    const ext = document.getElementById('phExtLink');
     if (ext) ext.href = data.url;
 
-    notify('Didit session active.', false);
+    showNotification('Didit KYC Session loaded successfully.', false);
 
-    // Listen for iframe events
+    // Listen for iframe messages
     window.addEventListener('message', onDiditMessage);
 
     // Start background status poller
     startPolling(data.session_id);
 
   } catch (err) {
-    console.error('[Verification Network Error]', err);
-    showError('Could not reach the verification API. Please check your network connection.');
-    notify('Network error.', true);
-    startBtn.disabled = false;
-    startBtn.innerHTML = `<span>Start Identity Verification</span> &rarr;`;
+    console.error('[API Connection Error]', err);
+    displayError('Unable to connect to verification API. Please check your network connection.');
+    showNotification('Network connection error.', true);
+    submitBtn.disabled = false;
+    submitBtn.innerHTML = `<span>Start Identity Verification</span> &rarr;`;
   }
 }
 
-// Background session poller
+// Background session polling
 function startPolling(sessionId) {
-  if (pollTimer) clearInterval(pollTimer);
+  if (statusPoller) clearInterval(statusPoller);
 
-  pollTimer = setInterval(async () => {
+  statusPoller = setInterval(async () => {
     try {
       const res = await fetch(`/api/session/${sessionId}`);
       if (res.ok) {
         const data = await res.json();
         if (data && data.status) {
-          const badge = document.getElementById('sessionStatusBadge');
-          if (badge) badge.textContent = `Status: ${data.status}`;
+          const statusBadge = document.getElementById('phSessionStatus');
+          if (statusBadge) statusBadge.textContent = `Status: ${data.status}`;
 
           if (data.status === 'Approved' || data.status === 'In Review') {
-            clearInterval(pollTimer);
+            clearInterval(statusPoller);
             showCompletionScreen(data.status);
           } else if (data.status === 'Declined') {
-            clearInterval(pollTimer);
+            clearInterval(statusPoller);
             showCompletionScreen('Declined');
           }
         }
       }
-    } catch (e) {
-      // Ignore background network jitter
+    } catch (_) {
+      // Ignore background network fluctuations
     }
   }, 3500);
 }
 
-// Manual refresh trigger
+// Manual status refresh
 async function checkStatusManually() {
-  if (!activeSessionId) {
-    notify('Checking session...', false);
+  if (!currentSessionId) {
+    showNotification('Checking status...', false);
     return;
   }
   try {
-    const res = await fetch(`/api/session/${activeSessionId}`);
+    const res = await fetch(`/api/session/${currentSessionId}`);
     if (res.ok) {
       const data = await res.json();
-      notify(`Current Status: ${data.status || 'In Progress'}`);
+      showNotification(`Current status: ${data.status || 'In Progress'}`);
       if (data.status === 'Approved') {
         showCompletionScreen('Approved');
       }
     }
-  } catch (e) {
-    notify('Status check queued.', false);
+  } catch (_) {
+    showNotification('Status check queued.', false);
   }
 }
 
-// Message handler from Didit
+// Message handler from Didit iframe
 function onDiditMessage(event) {
   if (event.origin && event.origin.includes('didit.me')) {
     console.log('[Didit Message Event]', event.data);
@@ -224,49 +223,50 @@ function onDiditMessage(event) {
   }
 }
 
-// View 3: Completion
+// Completion view
 function showCompletionScreen(finalStatus = 'Approved') {
-  if (pollTimer) {
-    clearInterval(pollTimer);
-    pollTimer = null;
+  if (statusPoller) {
+    clearInterval(statusPoller);
+    statusPoller = null;
   }
 
-  document.getElementById('viewVerification').style.display = 'none';
-  document.getElementById('viewCompletion').style.display = 'block';
-  setStep(3);
+  document.getElementById('phVerifyView').style.display = 'none';
+  document.getElementById('phCompletionView').style.display = 'block';
+  updateStepper(3);
 
-  const nameSpan = document.getElementById('resClientName');
-  const sessSpan = document.getElementById('resSessionId');
-  const statusSpan = document.getElementById('resStatus');
-  const heading = document.getElementById('resultHeading');
-  const msg = document.getElementById('resultMessage');
-  const icon = document.getElementById('resultIcon');
+  const nameVal = document.getElementById('phCandidateName');
+  const sessVal = document.getElementById('phSessionId');
+  const statusVal = document.getElementById('phFinalStatus');
+  const heading = document.getElementById('phHeading');
+  const desc = document.getElementById('phDesc');
 
-  if (activeCandidate) {
-    nameSpan.textContent = activeCandidate.name;
+  if (currentCandidate) {
+    nameVal.textContent = currentCandidate.name;
   }
-  if (activeSessionId) {
-    sessSpan.textContent = activeSessionId;
+  if (currentSessionId) {
+    sessVal.textContent = currentSessionId;
   }
 
   if (finalStatus === 'Approved') {
-    statusSpan.textContent = 'Approved';
-    statusSpan.className = 'receipt-pill approved';
-    heading.textContent = 'Verification Complete';
-    msg.textContent = 'Your identity documents and 3D biometric liveness have been verified successfully.';
+    statusVal.textContent = 'Verified / Approved';
+    statusVal.className = 'ph-status-pill';
+    heading.textContent = 'Screening Completed';
+    desc.textContent = 'Your identity documents and 3D biometric facial liveness have been verified successfully.';
   } else if (finalStatus === 'In Review') {
-    statusSpan.textContent = 'In Review';
-    statusSpan.className = 'receipt-pill';
-    statusSpan.style.color = '#fbbf24';
-    heading.textContent = 'Verification In Review';
-    msg.textContent = 'Your submission has been safely received and is being processed by our compliance team.';
+    statusVal.textContent = 'In Review';
+    statusVal.className = 'ph-status-pill';
+    statusVal.style.background = '#fef3c7';
+    statusVal.style.color = '#d97706';
+    statusVal.style.borderColor = '#fde68a';
+    heading.textContent = 'Screening In Review';
+    desc.textContent = 'Your submission has been safely received and is undergoing automated compliance checks.';
   } else {
-    statusSpan.textContent = 'Declined';
-    statusSpan.className = 'receipt-pill';
-    statusSpan.style.color = '#ef4444';
+    statusVal.textContent = 'Declined';
+    statusVal.className = 'ph-status-pill';
+    statusVal.style.background = '#fee2e2';
+    statusVal.style.color = '#dc2626';
+    statusVal.style.borderColor = '#fecaca';
     heading.textContent = 'Verification Needs Attention';
-    msg.textContent = 'The system was unable to verify your document. Please ensure your document is clearly legible and retry.';
-    icon.style.borderColor = '#ef4444';
-    icon.innerHTML = `<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+    desc.textContent = 'The system was unable to verify your document. Please ensure your document is clearly legible and retry.';
   }
 }
