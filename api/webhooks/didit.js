@@ -29,7 +29,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: "Method not allowed" });
   }
 
-  const DIDIT_WEBHOOK_SECRET = process.env.DIDIT_WEBHOOK_SECRET;
+  const DIDIT_WEBHOOK_SECRET = process.env.DIDIT_WEBHOOK_SECRET || "a1EphjUD7sY5fYnhBLhsdFsVC6B1s9GsmtT6jmtgLLs";
 
   try {
     const sig = req.headers["x-signature-v2"] || "";
