@@ -1,22 +1,22 @@
 /**
- * Clever Clouds Client Verification Portal Controller
- * Powered by Didit KYC Protocol
+ * Clever Clouds Enterprise Verification Controller
+ * Didit KYC Protocol Integration
  */
 
 let activeSessionId = null;
 let activeCandidate = null;
 let pollTimer = null;
 
-// Notification helper
+// Toast Notification
 function notify(text, isError = false) {
-  const tray = document.getElementById('toastContainer');
-  if (!tray) return;
+  const stack = document.getElementById('toastContainer');
+  if (!stack) return;
 
   const item = document.createElement('div');
-  item.className = 'portal-toast';
+  item.className = 'app-toast';
   item.style.borderColor = isError ? 'rgba(239, 68, 68, 0.5)' : 'rgba(99, 102, 241, 0.4)';
   item.innerHTML = `<span>${isError ? '⚠️' : '🛡️'}</span> <span>${text}</span>`;
-  tray.appendChild(item);
+  stack.appendChild(item);
 
   setTimeout(() => {
     item.style.opacity = '0';
@@ -43,33 +43,33 @@ function clearError() {
 }
 
 // Stepper updater
-function setStep(stepNumber) {
-  const n1 = document.getElementById('stepNode1');
-  const n2 = document.getElementById('stepNode2');
-  const n3 = document.getElementById('stepNode3');
-  const l1 = document.getElementById('stepLine1');
-  const l2 = document.getElementById('stepLine2');
+function setStep(stepNum) {
+  const s1 = document.getElementById('step1');
+  const s2 = document.getElementById('step2');
+  const s3 = document.getElementById('step3');
+  const c1 = document.getElementById('conn1');
+  const c2 = document.getElementById('conn2');
 
-  n1.className = 'step-node';
-  n2.className = 'step-node';
-  n3.className = 'step-node';
+  s1.className = 'step-item';
+  s2.className = 'step-item';
+  s3.className = 'step-item';
 
-  if (stepNumber === 1) {
-    n1.classList.add('active');
-  } else if (stepNumber === 2) {
-    n1.classList.add('completed');
-    n2.classList.add('active');
-    l1.style.background = 'var(--accent-emerald)';
-  } else if (stepNumber === 3) {
-    n1.classList.add('completed');
-    n2.classList.add('completed');
-    n3.classList.add('active', 'completed');
-    l1.style.background = 'var(--accent-emerald)';
-    l2.style.background = 'var(--accent-emerald)';
+  if (stepNum === 1) {
+    s1.classList.add('active');
+  } else if (stepNum === 2) {
+    s1.classList.add('completed');
+    s2.classList.add('active');
+    c1.style.background = 'var(--accent-emerald)';
+  } else if (stepNum === 3) {
+    s1.classList.add('completed');
+    s2.classList.add('completed');
+    s3.classList.add('active', 'completed');
+    c1.style.background = 'var(--accent-emerald)';
+    c2.style.background = 'var(--accent-emerald)';
   }
 }
 
-// Form Submission -> Start Verification
+// Start Verification Handler
 async function handleStartVerification(event) {
   event.preventDefault();
   clearError();
@@ -81,7 +81,8 @@ async function handleStartVerification(event) {
   const startBtn = document.getElementById('startBtn');
 
   if (!consentCheck.checked) {
-    notify('Please check the consent box to proceed.', true);
+    showError('Please check the consent box to proceed with the identity verification.');
+    notify('Consent required.', true);
     return;
   }
 
@@ -93,10 +94,10 @@ async function handleStartVerification(event) {
 
   startBtn.disabled = true;
   startBtn.innerHTML = `
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 1s linear infinite;">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="animation: spin 0.8s linear infinite;">
       <path d="M21 12a9 9 0 1 1-6.219-8.56"/>
     </svg>
-    <span>Generating Verification Session...</span>
+    <span>Initializing Secure Session...</span>
   `;
 
   try {
@@ -112,60 +113,60 @@ async function handleStartVerification(event) {
 
     if (!response.ok) {
       const err = await response.json().catch(() => ({}));
-      const msg = err.detail || err.error || `Server returned HTTP ${response.status}. Please check Didit API key.`;
+      const msg = err.detail || err.error || `Server responded with HTTP ${response.status}.`;
       showError(`Unable to start verification: ${msg}`);
-      notify('Session initiation failed.', true);
+      notify('Session creation failed.', true);
       startBtn.disabled = false;
-      startBtn.innerHTML = `<span>Proceed to ID Verification</span> &rarr;`;
+      startBtn.innerHTML = `<span>Start Identity Verification</span> &rarr;`;
       return;
     }
 
     const data = await response.json();
     if (!data.url) {
-      showError('Didit server did not return a valid verification URL.');
-      notify('Invalid verification response.', true);
+      showError('Didit verification service did not return an active session URL.');
+      notify('Invalid session response.', true);
       startBtn.disabled = false;
-      startBtn.innerHTML = `<span>Proceed to ID Verification</span> &rarr;`;
+      startBtn.innerHTML = `<span>Start Identity Verification</span> &rarr;`;
       return;
     }
 
     activeSessionId = data.session_id;
 
-    // Transition to Step 2
-    document.getElementById('formSection').style.display = 'none';
-    document.getElementById('verificationSection').style.display = 'block';
+    // Transition view
+    document.getElementById('viewForm').style.display = 'none';
+    document.getElementById('viewVerification').style.display = 'block';
     setStep(2);
 
-    // Show iframe loader
+    // Show iframe loading spinner
     const loader = document.getElementById('iframeLoader');
     if (loader) loader.style.display = 'flex';
 
-    // Set the live Didit verification URL into the iframe
+    // Inject verified Didit session URL
     const iframe = document.getElementById('diditIframe');
     iframe.src = data.url;
 
-    // Set external link
-    const extLink = document.getElementById('externalLink');
-    extLink.href = data.url;
+    // External link
+    const ext = document.getElementById('externalLink');
+    if (ext) ext.href = data.url;
 
-    notify('Verification session started.', false);
+    notify('Didit session active.', false);
 
-    // Listen for completion messages
+    // Listen for iframe events
     window.addEventListener('message', onDiditMessage);
 
-    // Start background status polling
+    // Start background status poller
     startPolling(data.session_id);
 
   } catch (err) {
-    console.error('Connection Exception:', err);
-    showError('Could not connect to /api/verify endpoint. Ensure the server or Vercel deployment is active.');
-    notify('Network connection error.', true);
+    console.error('[Verification Network Error]', err);
+    showError('Could not reach the verification API. Please check your network connection.');
+    notify('Network error.', true);
     startBtn.disabled = false;
-    startBtn.innerHTML = `<span>Proceed to ID Verification</span> &rarr;`;
+    startBtn.innerHTML = `<span>Start Identity Verification</span> &rarr;`;
   }
 }
 
-// Background session status poller
+// Background session poller
 function startPolling(sessionId) {
   if (pollTimer) clearInterval(pollTimer);
 
@@ -175,8 +176,8 @@ function startPolling(sessionId) {
       if (res.ok) {
         const data = await res.json();
         if (data && data.status) {
-          const title = document.getElementById('statusTitle');
-          if (title) title.textContent = `Status: ${data.status}`;
+          const badge = document.getElementById('sessionStatusBadge');
+          if (badge) badge.textContent = `Status: ${data.status}`;
 
           if (data.status === 'Approved' || data.status === 'In Review') {
             clearInterval(pollTimer);
@@ -188,7 +189,7 @@ function startPolling(sessionId) {
         }
       }
     } catch (e) {
-      // Ignore polling errors
+      // Ignore background network jitter
     }
   }, 3500);
 }
@@ -213,7 +214,7 @@ async function checkStatusManually() {
   }
 }
 
-// Handle message from Didit iframe
+// Message handler from Didit
 function onDiditMessage(event) {
   if (event.origin && event.origin.includes('didit.me')) {
     console.log('[Didit Message Event]', event.data);
@@ -223,15 +224,15 @@ function onDiditMessage(event) {
   }
 }
 
-// Transition to Step 3: Completion Screen
+// View 3: Completion
 function showCompletionScreen(finalStatus = 'Approved') {
   if (pollTimer) {
     clearInterval(pollTimer);
     pollTimer = null;
   }
 
-  document.getElementById('verificationSection').style.display = 'none';
-  document.getElementById('completionSection').style.display = 'block';
+  document.getElementById('viewVerification').style.display = 'none';
+  document.getElementById('viewCompletion').style.display = 'block';
   setStep(3);
 
   const nameSpan = document.getElementById('resClientName');
@@ -250,22 +251,22 @@ function showCompletionScreen(finalStatus = 'Approved') {
 
   if (finalStatus === 'Approved') {
     statusSpan.textContent = 'Approved';
-    statusSpan.className = 'row-val tag-approved';
-    heading.textContent = 'Verification Complete!';
+    statusSpan.className = 'receipt-pill approved';
+    heading.textContent = 'Verification Complete';
     msg.textContent = 'Your identity documents and 3D biometric liveness have been verified successfully.';
   } else if (finalStatus === 'In Review') {
     statusSpan.textContent = 'In Review';
-    statusSpan.className = 'row-val';
+    statusSpan.className = 'receipt-pill';
     statusSpan.style.color = '#fbbf24';
     heading.textContent = 'Verification In Review';
     msg.textContent = 'Your submission has been safely received and is being processed by our compliance team.';
   } else {
     statusSpan.textContent = 'Declined';
-    statusSpan.className = 'row-val';
+    statusSpan.className = 'receipt-pill';
     statusSpan.style.color = '#ef4444';
     heading.textContent = 'Verification Needs Attention';
     msg.textContent = 'The system was unable to verify your document. Please ensure your document is clearly legible and retry.';
     icon.style.borderColor = '#ef4444';
-    icon.innerHTML = `<svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+    icon.innerHTML = `<svg width="38" height="38" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
   }
 }
