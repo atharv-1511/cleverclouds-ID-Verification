@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Identity & Background Verification • Clever Clouds</title>
-  <meta name="description" content="Clever Clouds Enterprise Candidate Verification Portal powered by Didit KYC Protocol. Fast, secure, and compliant.">
+  <title>Client Identity Verification • Clever Clouds</title>
+  <meta name="description" content="Clever Clouds Enterprise Client Verification Portal powered by Didit KYC Protocol. Fast, secure, and compliant.">
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -12,26 +12,33 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
   
   <link rel="stylesheet" href="styles.css">
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%231e3a8a'%3E%3Cpath d='M17.5 19H9a7 7 0 1 1 6.71-9h1.79a4.5 4.5 0 1 1 0 9Z'/%3E%3C/svg%3E">
+  <link rel="icon" type="image/png" href="cc-blue.png">
 </head>
 <body>
 
-  <!-- peopleHum Style Corporate Topbar -->
+  <!-- Ambient Light Accents for Dark Mode -->
+  <div class="ambient-glow">
+    <div class="glow-orb orb-primary"></div>
+    <div class="glow-orb orb-cyan"></div>
+    <div class="subtle-grid"></div>
+  </div>
+
+  <!-- Corporate Header -->
   <header class="ph-header">
     <div class="header-inner">
       <div class="header-brand">
         <a href="https://www.cleverclouds.in" target="_blank" rel="noopener noreferrer" class="brand-logo-container" title="Clever Clouds Official">
+          <!-- Official Blue Logo from Workspace -->
           <img 
-            src="https://www.cleverclouds.in/logo-white.svg" 
-            alt="Clever Clouds" 
+            src="cc-blue.png" 
+            alt="Clever Clouds Logo" 
             class="brand-logo-img"
-            onerror="this.onerror=null; this.src='https://www.cleverclouds.in/cc-blue.webp';"
           />
         </a>
         <div class="brand-divider"></div>
         <div class="header-portal-title">
-          <span class="portal-title-text">Candidate Verification Portal</span>
-          <span class="portal-subtitle-text">Clever Clouds Screening</span>
+          <span class="portal-title-text">Client Verification Portal</span>
+          <span class="portal-subtitle-text">Clever Clouds Identity Screening</span>
         </div>
       </div>
 
@@ -48,25 +55,25 @@
     </div>
   </header>
 
-  <!-- Main Canvas: peopleHum Split Layout -->
+  <!-- Main Canvas: Split Layout (Dark Mode) -->
   <main class="page-canvas">
     <div class="split-layout">
 
-      <!-- LEFT SIDE: Context, Instructions & Checkpoint Steps -->
+      <!-- LEFT SIDE: Client Context, Instructions & Checkpoint Steps -->
       <aside class="context-panel">
         <div class="context-hero-badge">
-          <span>Identity & Background Check</span>
+          <span>Client Identity Screening</span>
         </div>
 
         <h1 class="context-heading">
-          Fast, Automated Candidate <span>Identity Screening</span>.
+          Fast, Automated Client <span>Identity Screening</span>.
         </h1>
 
         <p class="context-description">
-          Welcome to the Clever Clouds onboarding and identity verification portal. This automated check verifies your legal identity documents and 3D facial biometrics in real-time.
+          Welcome to the Clever Clouds client identity verification portal. This automated check securely verifies your legal identity documents and 3D facial biometrics in real-time.
         </p>
 
-        <!-- peopleHum Step Checkpoints Card -->
+        <!-- Step Checkpoints Card -->
         <div class="screening-steps-card">
           <div class="steps-card-title">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -127,14 +134,14 @@
         </div>
       </aside>
 
-      <!-- RIGHT SIDE: peopleHum Verification Card -->
+      <!-- RIGHT SIDE: Primary Verification Card -->
       <section class="verification-canvas-card">
         
         <!-- Progress Stepper -->
         <div class="ph-stepper">
           <div class="ph-step active" id="phStep1">
             <div class="step-idx">1</div>
-            <span class="step-name">Candidate Info</span>
+            <span class="step-name">Client Info</span>
           </div>
           <div class="ph-step" id="phStep2">
             <div class="step-idx">2</div>
@@ -146,11 +153,11 @@
           </div>
         </div>
 
-        <!-- VIEW 1: Candidate Intake Form -->
+        <!-- VIEW 1: Client Intake Form (NO PRE-FILLED INFO) -->
         <div class="form-view-body" id="phFormView">
           <div class="form-intro-header">
-            <h2 class="form-main-heading">Candidate Information</h2>
-            <p class="form-sub-heading">Please confirm your details to begin the automated screening session.</p>
+            <h2 class="form-main-heading">Client Information</h2>
+            <p class="form-sub-heading">Please enter your details to begin the automated verification session.</p>
           </div>
 
           <div id="phAlert" class="ph-alert-box" style="display: none;"></div>
@@ -164,7 +171,7 @@
                     <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/>
                     <circle cx="12" cy="7" r="4"/>
                   </svg>
-                  <input type="text" id="cName" class="ph-text-input" placeholder="e.g. Atharv Raskar" required autofocus value="Atharv Raskar">
+                  <input type="text" id="cName" class="ph-text-input" placeholder="As written on your government ID" required autofocus>
                 </div>
               </div>
 
@@ -175,19 +182,19 @@
                     <rect width="20" height="16" x="2" y="4" rx="2"/>
                     <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
                   </svg>
-                  <input type="email" id="cEmail" class="ph-text-input" placeholder="you@company.com" required value="reach-us@cleverclouds.in">
+                  <input type="email" id="cEmail" class="ph-text-input" placeholder="name@company.com" required>
                 </div>
               </div>
             </div>
 
             <div class="form-group-item">
-              <label for="cRef" class="ph-input-label">Reference ID / Candidate ID</label>
+              <label for="cRef" class="ph-input-label">Client Reference ID / Account Number</label>
               <div class="input-with-icon">
                 <svg class="input-icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <rect width="20" height="14" x="2" y="5" rx="2"/>
                   <line x1="2" x2="22" y1="10" y2="10"/>
                 </svg>
-                <input type="text" id="cRef" class="ph-text-input" placeholder="e.g. CLV-REF-8921 or Mobile Number">
+                <input type="text" id="cRef" class="ph-text-input" placeholder="e.g. CLV-CLI-8921 or Phone Number">
               </div>
             </div>
 
@@ -210,7 +217,7 @@
               <label class="consent-checkbox-row">
                 <input type="checkbox" id="cConsent" required checked>
                 <span class="consent-label-text">
-                  I consent to the collection and verification of my government-issued ID and 3D biometric facial scans by <strong>Clever Clouds</strong> and <strong>Didit KYC Protocol</strong> strictly for background verification and regulatory compliance purposes.
+                  I consent to the collection and verification of my government-issued ID and 3D biometric facial scans by <strong>Clever Clouds</strong> and <strong>Didit KYC Protocol</strong> strictly for client background verification and regulatory compliance purposes.
                 </span>
               </label>
             </div>
@@ -285,14 +292,14 @@
             </svg>
           </div>
 
-          <h2 class="completion-heading" id="phHeading">Screening Completed</h2>
+          <h2 class="completion-heading" id="phHeading">Verification Completed</h2>
           <p class="completion-desc" id="phDesc">
             Your identity documents and 3D biometric verification have been processed successfully.
           </p>
 
           <div class="receipt-summary-table">
             <div class="receipt-item-row">
-              <span class="receipt-item-label">Candidate Name</span>
+              <span class="receipt-item-label">Client Name</span>
               <span class="receipt-item-val" id="phCandidateName">-</span>
             </div>
             <div class="receipt-item-row">
@@ -317,7 +324,7 @@
     </div>
   </main>
 
-  <!-- peopleHum Style Footer with 2024 Copyright -->
+  <!-- Footer with 2024 Copyright -->
   <footer class="ph-footer">
     <div class="footer-inner">
       <div>
